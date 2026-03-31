@@ -8,6 +8,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
@@ -22,6 +24,10 @@ public class Treino {
     private String nome;
 
     private String focoMuscular;
+
+    @ManyToOne
+    @JoinColumn(name = "usuario_id")
+    private Usuario usuario;
 
     @OneToMany(mappedBy = "treino", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Exercicio> exercicios = new ArrayList<>();
@@ -56,6 +62,14 @@ public class Treino {
 
     public void setFocoMuscular(String focoMuscular) {
         this.focoMuscular = focoMuscular;
+    }
+
+    public void getUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 
     public List<Exercicio> getExercicios() {
