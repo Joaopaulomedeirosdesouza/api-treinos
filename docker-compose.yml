@@ -1,0 +1,12 @@
+version: "3.8"
+services:
+  db:
+    image: postgres:16
+    container_name: postgres-treinos
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: api_treinos_db
+    ports:
+      - "5432:5432"
+    restart: always
