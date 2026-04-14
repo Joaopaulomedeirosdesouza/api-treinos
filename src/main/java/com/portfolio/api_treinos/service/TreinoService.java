@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.portfolio.api_treinos.model.Exercicio;
 import com.portfolio.api_treinos.model.Treino;
+import com.portfolio.api_treinos.model.Usuario;
 import com.portfolio.api_treinos.repository.ExercicioRepository;
 import com.portfolio.api_treinos.repository.TreinoRepository;
 
@@ -24,8 +25,8 @@ public class TreinoService {
         return treinoRepository.save(treino);
     }
 
-    public List<Treino> listarTodos() {
-        return treinoRepository.findAll();
+    public List<Treino> listarPorUsuario(Usuario usuario) {
+        return treinoRepository.findByUsuario(usuario);
     }
 
     public Exercicio adicionarExercicio(Long idTreino, Exercicio exercicio) {

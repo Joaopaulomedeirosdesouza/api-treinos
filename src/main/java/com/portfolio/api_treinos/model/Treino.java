@@ -64,8 +64,8 @@ public class Treino {
         this.focoMuscular = focoMuscular;
     }
 
-    public void getUsuario(Usuario usuario) {
-        this.usuario = usuario;
+    public Usuario getUsuario() {
+        return usuario;
     }
 
     public void setUsuario(Usuario usuario) {

@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 
+import org.springframework.security.core.context.SecurityContextHolder;
+import com.portfolio.api_treinos.model.Usuario;
+
 import com.portfolio.api_treinos.model.Exercicio;
 import com.portfolio.api_treinos.model.Treino;
 import com.portfolio.api_treinos.service.TreinoService;
@@ -35,7 +38,9 @@ public class TreinoController {
     @GetMapping
     public List<TreinoResponseDTO> listar() {
 
-        return service.listarTodos().stream()
+        Usuario usuarioLogado = (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        return service.listarPorUsuario(usuarioLogado).stream()
                 .map(TreinoResponseDTO::new)
                 .toList();
     }
@@ -47,7 +52,6 @@ public class TreinoController {
             @RequestBody @Valid ExercicioRequestDTO dto) {
 
         Exercicio novoExercicio = new Exercicio(dto.nome(), dto.series(), dto.repeticoes(), dto.cargaAtual(), null);
-
         Exercicio exercicioSalvo = service.adicionarExercicio(idTreino, novoExercicio);
 
         return new ExercicioResponseDTO(exercicioSalvo);
@@ -58,6 +62,10 @@ public class TreinoController {
     public TreinoResponseDTO criar(@RequestBody @Valid TreinoRequestDTO dto) {
 
         Treino novoTreino = new Treino(dto.nome(), dto.focoMuscular());
+
+        Usuario usuarioLogado = (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        novoTreino.setUsuario(usuarioLogado);
 
         Treino treinoSalvo = service.criarTreino(novoTreino);
 
@@ -74,7 +82,6 @@ public class TreinoController {
     public TreinoResponseDTO atualizar(@PathVariable("id") Long id, @RequestBody @Valid TreinoRequestDTO dto) {
 
         Treino dadosParaAtualizar = new Treino(dto.nome(), dto.focoMuscular());
-
         Treino treinoAtualizado = service.atualizarTreino(id, dadosParaAtualizar);
 
         return new TreinoResponseDTO(treinoAtualizado);
