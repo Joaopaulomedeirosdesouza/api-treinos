@@ -6,12 +6,15 @@ import org.springframework.stereotype.Service;
 import com.portfolio.api_treinos.infra.RegraDeNegocioException;
 import com.portfolio.api_treinos.model.Usuario;
 import com.portfolio.api_treinos.repository.UsuarioRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Service
 public class UsuarioService {
 
     private final UsuarioRepository repository;
     private final PasswordEncoder passwordEncoder;
+    private static final Logger log = LoggerFactory.getLogger(UsuarioService.class);
 
     public UsuarioService(UsuarioRepository repository, PasswordEncoder passwordEncoder) {
         this.repository = repository;
@@ -25,7 +28,7 @@ public class UsuarioService {
 
         String senhaCriptografada = passwordEncoder.encode(usuario.getSenha());
         usuario.setSenha(senhaCriptografada);
-
+        log.info("Novo usuário cadastrado: {}", usuario.getEmail());
         return repository.save(usuario);
     }
 }

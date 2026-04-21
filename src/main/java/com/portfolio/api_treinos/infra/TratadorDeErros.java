@@ -5,7 +5,6 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import com.portfolio.api_treinos.infra.RegraDeNegocioException;
 
 import java.util.List;
 

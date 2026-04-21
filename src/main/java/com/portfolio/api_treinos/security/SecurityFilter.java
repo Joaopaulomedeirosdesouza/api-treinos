@@ -7,17 +7,21 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.portfolio.api_treinos.infra.RegraDeNegocioException;
 import com.portfolio.api_treinos.repository.UsuarioRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Component
 public class SecurityFilter extends OncePerRequestFilter {
 
     private final TokenService tokenService;
     private final UsuarioRepository repository;
+    private static final Logger log = LoggerFactory.getLogger(SecurityFilter.class);
 
     public SecurityFilter(TokenService tokenService, UsuarioRepository repository) {
         this.tokenService = tokenService;
@@ -33,8 +37,10 @@ public class SecurityFilter extends OncePerRequestFilter {
         if (tokenJWT != null) {
 
             var subject = tokenService.getSubject(tokenJWT);
+            log.info("Usuário autenticado: {}", subject);
 
-            var usuario = repository.findByEmail(subject).get();
+            var usuario = repository.findByEmail(subject)
+                    .orElseThrow(() -> new RegraDeNegocioException("Usuário não encontrado!"));
 
             var authentication = new UsernamePasswordAuthenticationToken(usuario, null, usuario.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);

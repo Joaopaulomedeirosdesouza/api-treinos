@@ -1,7 +1,5 @@
 package com.portfolio.api_treinos.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -25,7 +23,6 @@ public class Exercicio {
 
     @ManyToOne
     @JoinColumn(name = "treino_id")
-    @JsonIgnore
     private Treino treino;
 
     public Exercicio() {

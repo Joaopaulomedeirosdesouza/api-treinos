@@ -1,7 +1,5 @@
 package com.portfolio.api_treinos.controller;
 
-import java.util.List;
-
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,9 +11,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-
 import org.springframework.security.core.context.SecurityContextHolder;
 import com.portfolio.api_treinos.model.Usuario;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import com.portfolio.api_treinos.model.Exercicio;
 import com.portfolio.api_treinos.model.Treino;
@@ -36,13 +35,11 @@ public class TreinoController {
     }
 
     @GetMapping
-    public List<TreinoResponseDTO> listar() {
+    public Page<TreinoResponseDTO> listar(Pageable pageable) {
 
         Usuario usuarioLogado = (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        return service.listarPorUsuario(usuarioLogado).stream()
-                .map(TreinoResponseDTO::new)
-                .toList();
+        return service.listarPorUsuario(usuarioLogado, pageable).map(TreinoResponseDTO::new);
     }
 
     @PostMapping("/{id}/exercicios")
